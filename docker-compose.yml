@@ -1,0 +1,36 @@
+# Use this AFTER the project works locally. Run: docker compose up --build
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_PASSWORD: samir
+      POSTGRES_DB: semantic_cache
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d semantic_cache"]
+      interval: 3s
+      retries: 20
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://samir:postgres@db:5433/semantic_cache
+      VECTOR_STORE: ${VECTOR_STORE:-pgvector}
+      PINECONE_API_KEY: ${PINECONE_API_KEY:-}
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      LLM_MODEL: ${LLM_MODEL:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      SIMILARITY_THRESHOLD: ${SIMILARITY_THRESHOLD:-0.90}
+      VERIFY_MODE: ${VERIFY_MODE:-none}
+    ports: ["8000:8000"]
+    depends_on:
+      db: { condition: service_healthy }
+
+  frontend:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on: [backend]
+
+volumes:
+  pgdata:

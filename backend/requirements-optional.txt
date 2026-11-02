@@ -1,0 +1,4 @@
+# Install only what you use:
+pinecone>=5.0        # VECTOR_STORE=pinecone
+anthropic>=0.40      # LLM_PROVIDER=anthropic
+openai>=1.40         # LLM_PROVIDER=openai

@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+semantic/
+node_modules/
+frontend/dist/
+bench/results/
+bench/data/
+.pytest_cache/
+backend/requirements-optional

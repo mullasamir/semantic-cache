@@ -1,0 +1,5 @@
+numpy>=1.26
+requests>=2.31
+matplotlib>=3.8
+# only for download_qqp.py:
+# datasets>=2.19
